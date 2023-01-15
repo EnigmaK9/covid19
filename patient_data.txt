@@ -1,1 +1,1 @@
-{'fever': 'no', 'cough': 'no', 'breathing': 'yes'}
+{'fever': 'yes', 'cough': 'no', 'breathing': 'no'}
