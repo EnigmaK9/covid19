@@ -1,0 +1,40 @@
+(deftemplate paciente
+   (slot fiebre (tipo SYMBOL))
+   (slot tos (tipo SYMBOL))
+   (slot dificultad-respirar (tipo SYMBOL))
+)
+
+(deffacts pacientes
+   (paciente (fiebre si) (tos si) (dificultad-respirar si))
+   (paciente (fiebre si) (tos si) (dificultad-respirar no))
+   (paciente (fiebre si) (tos no) (dificultad-respirar si))
+   (paciente (fiebre si) (tos no) (dificultad-respirar no))
+   (paciente (fiebre no) (tos si) (dificultad-respirar si))
+   (paciente (fiebre no) (tos si) (dificultad-respirar no))
+   (paciente (fiebre no) (tos no) (dificultad-respirar si))
+   (paciente (fiebre no) (tos no) (dificultad-respirar no))
+)
+
+(defrule diagnosticar-covid
+   (paciente (fiebre si) (tos si) (dificultad-respirar si))
+   =>
+   (printout t "Es probable que el paciente esté infectado con COVID." crlf)
+)
+
+(defrule diagnosticar-covid
+   (paciente (fiebre si) (tos si) (dificultad-respirar no))
+   =>
+   (printout t "Es posible que el paciente esté infectado con COVID." crlf)
+)
+
+(defrule diagnosticar-covid
+   (paciente (fiebre si) (tos no) (dificultad-respirar si))
+   =>
+   (printout t "Es posible que el paciente esté infectado con COVID." crlf)
+)
+
+(defrule diagnosticar-covid
+   (paciente (fiebre no) (tos no) (dificultad-respirar no))
+   =>
+   (printout t "Es poco probable que el paciente esté infectado con COVID." crlf)
+)
