@@ -1,6 +1,6 @@
 import tkinter as tk
 import pickle
-import pyclips
+
 
 # Obtener los datos del formulario
 def get_data():
@@ -13,9 +13,9 @@ def get_data():
 # Guardar los datos en un archivo
 def save_data():
     data = get_data()
-    with open("patient_data.pickle", "wb") as f:
-        pickle.dump(data, f)
-    print("Data saved to patient_data.pickle")
+    with open("patient_data.txt", "w") as f:
+        f.write(str(data))
+    print("Data saved to patient_data.txt")
 
 # Crear la interfaz gráfica
 root = tk.Tk()
