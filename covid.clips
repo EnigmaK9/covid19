@@ -1,0 +1,50 @@
+(deftemplate paciente
+   (slot fiebre (type SYMBOL))
+   (slot tos (type SYMBOL))
+   (slot resp (type SYMBOL))
+   (slot resultado) (type SYMBOL))
+
+(deffacts pacientes
+   (paciente (fiebre no) (tos no) (resp no) (resultado no))
+   (paciente (fiebre si) (tos si) (resp si) (resultado si))
+   (paciente (fiebre si) (tos si) (resp no) (resultado no))
+   (paciente (fiebre si) (tos no) (resp si) (resultado si))
+   (paciente (fiebre si) (tos si) (resp si) (resultado si))
+   (paciente (fiebre no) (tos si) (resp no) (resultado no))
+   (paciente (fiebre si) (tos no) (resp si) (resultado si))
+   (paciente (fiebre si) (tos no) (resp si) (resultado si))
+   (paciente (fiebre no) (tos si) (resp si) (resultado si))
+   (paciente (fiebre si) (tos si) (resp no) (resultado si))
+   (paciente (fiebre no) (tos si) (resp no) (resultado no))
+   (paciente (fiebre no) (tos si) (resp si) (resultado si))
+   (paciente (fiebre no) (tos si) (resp si) (resultado no))
+   (paciente (fiebre si) (tos si) (resp no) (resultado no))
+)
+
+(defrule diagnostico
+   (paciente (fiebre ?f) (tos ?t) (resp ?r))
+   (test (and (eq ?f si) (eq ?t si) (eq ?r si)))
+   =>
+   (assert (paciente (resultado si))))
+
+
+(defrule diagnostico
+   (paciente (fiebre ?f) (tos ?t) (resp ?r))
+   (test (and (or (eq ?f si) (eq ?t si) (eq ?r si)) (not (and (eq ?f si) (eq ?t si) (eq ?r si)))))
+   =>
+   (assert (paciente (resultado no))))
+
+
+(defrule recolectar-datos
+   (paciente)
+   =>
+   (bind ?f (read-line "Ingrese si tiene fiebre (si/no): "))
+   (bind ?t (read-line "Ingrese si tiene tos (si/no): "))
+   (bind ?r (read-line "Ingrese si tiene dificultad respiratoria (si/no): "))
+   (assert (paciente (fiebre ?f) (tos ?t) (resp ?r))))
+
+(defrule mostrar-resultado
+   (paciente (resultado ?res))
+   =>
+   (printout t "El resultado del diagnostico es: " ?res crlf))
+
