@@ -1,8 +1,9 @@
 (deftemplate paciente
-   (slot fiebre (type SYMBOL))
+   (slot fiebre (type SYMBOL)) ;define el tipo de dato de slot como symbol
    (slot tos (type SYMBOL))
    (slot resp (type SYMBOL))
-   (slot resultado) (type SYMBOL))
+   (slot resultado (type SYMBOL)))
+
 
 (deffacts pacientes
    (paciente (fiebre no) (tos no) (resp no) (resultado no))
@@ -25,26 +26,39 @@
    (paciente (fiebre ?f) (tos ?t) (resp ?r))
    (test (and (eq ?f si) (eq ?t si) (eq ?r si)))
    =>
-   (assert (paciente (resultado si))))
+   (assert (paciente (resultado si)))) ; si el paciente tiene fiebre, tos y dificultad respiratoria, 
+   ; se aserta que el paciente está enfermo
 
 
-(defrule diagnostico
-   (paciente (fiebre ?f) (tos ?t) (resp ?r))
+(defrule diagnostico ; esta regla se activa cuando se cumple la condición de tener fiebre, 
+; tos y dificultar respiratoria
+   (paciente (fiebre ?f) (tos ?t) (resp ?r)) ; se comprueba si se cumplen las condiciones de tener 
+   ; fiebre, tos y dificultad respiratoria
    (test (and (or (eq ?f si) (eq ?t si) (eq ?r si)) (not (and (eq ?f si) (eq ?t si) (eq ?r si)))))
+   ; si se cumplen las condiciones se agrega un hecho de resultado negativo
    =>
    (assert (paciente (resultado no))))
 
 
-(defrule recolectar-datos
+(defrule recolectar-datos ; regla para recolectar los datos de un paciente
    (paciente)
    =>
-   (bind ?f (read-line "Ingrese si tiene fiebre (si/no): "))
-   (bind ?t (read-line "Ingrese si tiene tos (si/no): "))
-   (bind ?r (read-line "Ingrese si tiene dificultad respiratoria (si/no): "))
+   ; se pide al usuario que ingrese si tiene fiebre, tos y dificultad respiratoria
+   (bind ?f (read "Ingrese si tiene fiebre (si/no): "))
+   ; se utiliza la función read para recolectar informacion del paciente, si tiene fiebre
+   (bind ?t (read "Ingrese si tiene tos (si/no): "))
+   ; si tiene tos
+   (bind ?r (read "Ingrese si tiene dificultad respiratoria (si/no): "))
+   ; si tiene dificultad respiratoria
    (assert (paciente (fiebre ?f) (tos ?t) (resp ?r))))
+   ; se utiliza la funcion assert para guardar la informacion del paciente en una plantilla paciente
+
+
 
 (defrule mostrar-resultado
    (paciente (resultado ?res))
    =>
    (printout t "El resultado del diagnostico es: " ?res crlf))
+   ; se utiliza la funcion printout para mostrar en pantalla el resultado del diagnostico del 
+   ; paciente, obtenido a partir de la información recolectada
 
