@@ -1,0 +1,94 @@
+(deftemplate patient
+   (slot fever (type SYMBOL))
+   (slot cough (type SYMBOL))
+   (slot difficulty-breathing (type SYMBOL))
+   (slot infected (type SYMBOL))
+)
+
+(deffacts patients
+   (patient (fever yes) (cough yes) (difficulty-breathing yes) (infected yes))
+   (patient (fever yes) (cough yes) (difficulty-breathing no) (infected no))
+   (patient (fever yes) (cough no) (difficulty-breathing yes) (infected yes))
+   (patient (fever yes) (cough no) (difficulty-breathing no) (infected no))
+   (patient (fever no) (cough yes) (difficulty-breathing yes) (infected yes))
+   (patient (fever no) (cough yes) (difficulty-breathing no) (infected no))
+   (patient (fever no) (cough no) (difficulty-breathing yes) (infected yes))
+   (patient (fever no) (cough no) (difficulty-breathing no) (infected no))
+)
+
+(defrule diagnose-covid-yes
+   (patient (fever yes) (cough yes) (difficulty-breathing yes))
+   =>
+   (printout t "It is very likely that the patient is infected with COVID." crlf)
+   (printout t "Es muy probable que el paciente esté infectado con COVID." crlf)
+)
+
+(defrule diagnose-covid-two-symptoms-1
+(patient (fever yes) (cough yes)(difficulty-breathing no))
+=>
+(printout t "It is likely that the patient is infected with COVID. It has two symptoms" crlf)
+(printout t "Es probable que el paciente esté infectado con COVID. Tiene dos síntomas" crlf)
+)
+
+(defrule diagnose-covid-two-symptoms-2
+(patient (fever yes)(cough no) (difficulty-breathing yes))
+=>
+(printout t "It is likely that the patient is infected with COVID. It has two symptoms" crlf)
+(printout t "Es probable que el paciente esté infectado con COVID. Tiene dos síntomas" crlf)
+)
+
+(defrule diagnose-covid-two-symptoms-3
+(patient (fever no)(cough yes) (difficulty-breathing yes))
+=>
+(printout t "It is likely that the patient is infected with COVID. It has two symptoms" crlf)
+(printout t "Es probable que el paciente esté infectado con COVID. Tiene dos síntomas" crlf)
+)
+
+(defrule diagnose-covid-one-symptom-1
+(patient (fever yes) (cough no) (difficulty-breathing no))
+=>
+(printout t "It is possible, but not likely that the patient is infected with COVID." crlf)
+(printout t "Es posible, pero no probable que el paciente esté infectado con COVID." crlf)
+)
+
+(defrule diagnose-covid-one-symptom-2
+(patient (fever no) (cough yes) (difficulty-breathing no))
+=>
+(printout t "It is possible, but not likely that the patient is infected with COVID." crlf)
+(printout t "Es posible, pero no probable que el paciente esté infectado con COVID." crlf)
+)
+
+(defrule diagnose-covid-one-symptom-3
+(patient (fever no) (cough no) (difficulty-breathing yes))
+=>
+(printout t "It is possible, but not likely that the patient is infected with COVID." crlf)
+(printout t "Es posible, pero no probable que el paciente esté infectado con COVID." crlf)
+)
+
+
+(defrule diagnose-covid-no
+   (patient (fever no) (cough no) (difficulty-breathing no))
+   =>
+   (printout t "It is unlikely that the patient is infected with COVID." crlf)
+   (printout t "Es muy improbable que el paciente esté infectado con COVID." crlf)
+)
+
+(deffunction sintomas()
+   (printout t "Teclea yes o no / Type yes or no. ")
+   (printout t "Fiebre / Fever: ")
+   (bind ?fever (read))
+   (printout t "Fiebre / Fever: " ?fever crlf)
+   (printout t "Tos / Cough: ")
+   (bind ?cough (read))
+   (printout t "Tos / Cough: " ?cough crlf)
+   (printout t "Dificultad para respirar / Difficulty Breathing: ")
+   (bind ?difficulty-breathing (read))
+   (printout t "Dificultad para respirar / Difficulty Breathing: " ?difficulty-breathing crlf)
+   
+   (if (and (eq ?fever yes) (eq ?cough yes) (eq ?difficulty-breathing yes))
+      then (bind ?infected yes)
+      else (bind ?infected no))
+
+   (assert (patient (fever ?fever) (cough ?cough) (difficulty-breathing ?difficulty-breathing) (infected ?infected)))
+   (printout t "teclea (run) / type (run)" crlf)
+)
