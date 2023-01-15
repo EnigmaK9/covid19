@@ -1,33 +1,37 @@
-from tkinter import *
+import tkinter as tk
+import pickle
+import pyclips
 
-def get_patient_symptoms():
-    fever = fever_entry.get()
-    cough = cough_entry.get()
-    difficulty_breathing = difficulty_breathing_entry.get()
-    # Aquí puede enviar los datos a CLIPS para su procesamiento.
-    print("Fever: ", fever)
-    print("Cough: ", cough)
-    print("Difficulty Breathing: ", difficulty_breathing)
+# Obtener los datos del formulario
+def get_data():
+    fever = fever_var.get()
+    cough = cough_var.get()
+    breathing = breathing_var.get()
+    data = {"fever": fever, "cough": cough, "breathing": breathing}
+    return data
 
-root = Tk()
-root.title("Patient Symptoms")
+# Guardar los datos en un archivo
+def save_data():
+    data = get_data()
+    with open("patient_data.pickle", "wb") as f:
+        pickle.dump(data, f)
+    print("Data saved to patient_data.pickle")
 
-fever_label = Label(root, text="Fever (yes/no):")
-fever_label.grid(row=0, column=0, padx=5, pady=5)
-fever_entry = Entry(root)
-fever_entry.grid(row=0, column=1, padx=5, pady=5)
+# Crear la interfaz gráfica
+root = tk.Tk()
+root.title("COVID-19 Diagnosis Form")
 
-cough_label = Label(root, text="Cough (yes/no):")
-cough_label.grid(row=1, column=0, padx=5, pady=5)
-cough_entry = Entry(root)
-cough_entry.grid(row=1, column=1, padx=5, pady=5)
+# Crear las variables de los checkboxes
+fever_var = tk.StringVar()
+cough_var = tk.StringVar()
+breathing_var = tk.StringVar()
 
-difficulty_breathing_label = Label(root, text="Difficulty Breathing (yes/no):")
-difficulty_breathing_label.grid(row=2, column=0, padx=5, pady=5)
-difficulty_breathing_entry = Entry(root)
-difficulty_breathing_entry.grid(row=2, column=1, padx=5, pady=5)
+# Crear los checkboxes
+tk.Checkbutton(root, text="Fever", variable=fever_var, onvalue="yes", offvalue="no").grid(row=0, column=0)
+tk.Checkbutton(root, text="Cough", variable=cough_var, onvalue="yes", offvalue="no").grid(row=1, column=0)
+tk.Checkbutton(root, text="Difficulty Breathing", variable=breathing_var, onvalue="yes", offvalue="no").grid(row=2, column=0)
 
-submit_button = Button(root, text="Submit", command=get_patient_symptoms)
-submit_button.grid(row=3, column=0, columnspan=2, padx=5, pady=5, ipadx=50)
+# Crear el botón para guardar los datos
+tk.Button(root, text="Save Data", command=save_data).grid(row=3, column=0)
 
 root.mainloop()
