@@ -1,4 +1,5 @@
 # COVID-19 Diagnóstico CLIPS
+<a href=https://www.youtube.com/watch?v=Y2nVhJqTQNY&ab_channel=CarlosIgnacioPadillaHerrera> Video del proyecto</a>
 Este es un programa de CLIPS para diagnosticar si un paciente tiene COVID-19 basado en síntomas como fiebre, tos y dificultad respiratoria.
 
 ## Cómo usarlo
